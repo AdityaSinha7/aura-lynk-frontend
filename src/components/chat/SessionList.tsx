@@ -26,7 +26,7 @@ interface SessionListProps {
   currentSessionId: number;
   onSessionSelect: (session: ChatSession) => void;
   onSessionDelete: (sessionId: number) => void;
-  onSessionRename: (sessionId: number) => void;
+  onSessionRename?: (sessionId: number) => void;
   sx?: SxProps<Theme>;
 }
 

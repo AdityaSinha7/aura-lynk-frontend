@@ -26,6 +26,7 @@ export const ChatPage: React.FC = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isNameDialogOpen, setIsNameDialogOpen] = useState(false);
   const [sessionToRename, setSessionToRename] = useState<ChatSession | null>(null);
+  const [isTyping, setIsTyping] = useState(false);
 
   const loadMessages = async (sessionId: number, page: number) => {
     try {
@@ -93,12 +94,13 @@ export const ChatPage: React.FC = () => {
 
     setIsLoading(true);
     setError(null);
+    setIsTyping(true);
 
     try {
       const response = await chatService.sendMessage(session.id, content);
       const updatedMessages = await chatService.getMessages(session.id);
       setMessages(updatedMessages.content);
-    } catch (err: unknown) {
+    } catch (err) {
       setError('Failed to send message');
       console.error('Message send error:', err);
       if (err instanceof AxiosError && err.response?.status === 403) {
@@ -107,6 +109,7 @@ export const ChatPage: React.FC = () => {
       }
     } finally {
       setIsLoading(false);
+      setIsTyping(false);
     }
   };
 
@@ -351,6 +354,7 @@ export const ChatPage: React.FC = () => {
             isLoadingMore={isLoadingMore}
             onLoadMore={handleLoadMore}
             onRetryMessage={handleRetryMessage}
+            isTyping={isTyping}
           />
           <MessageInput 
             onSendMessage={handleSendMessage} 

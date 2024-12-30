@@ -12,11 +12,13 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   disabled = false 
 }) => {
   const [message, setMessage] = useState('');
+  const inputRef = React.useRef<HTMLTextAreaElement>(null);
 
   const handleSend = () => {
     if (message.trim()) {
       onSendMessage(message.trim());
       setMessage('');
+      inputRef.current?.focus();
     }
   };
 
@@ -36,6 +38,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
       backgroundColor: 'background.paper'
     }}>
       <TextField
+        inputRef={inputRef}
         fullWidth
         multiline
         maxRows={3}

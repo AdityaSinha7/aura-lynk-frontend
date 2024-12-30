@@ -47,8 +47,9 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ message, onRetry }) => {
     <Box
       sx={{
         display: 'flex',
-        justifyContent: isUser ? 'flex-end' : 'flex-start',
-        mb: 2,
+        flexDirection: 'column',
+        alignItems: isUser ? 'flex-end' : 'flex-start',
+        mb: 2
       }}
     >
       <Paper
@@ -62,15 +63,21 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ message, onRetry }) => {
         }}
       >
         <Typography variant="body1">{message.content}</Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          {message.status === 'sent' && <DoneAllIcon sx={{ fontSize: 16 }} />}
+          {message.status === 'error' && (
+            <ErrorOutlineIcon color="error" sx={{ fontSize: 16 }} />
+          )}
+          <Typography variant="caption">
+            {new Date(message.timestamp).toLocaleTimeString()}
+          </Typography>
+        </Box>
         <Box sx={{ 
           display: 'flex', 
           alignItems: 'center', 
           gap: 0.5,
           opacity: 0.7 
         }}>
-          <Typography variant="caption">
-            {new Date(message.timestamp).toLocaleTimeString()}
-          </Typography>
           {renderStatus()}
         </Box>
       </Paper>
