@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { ChatMessage, ChatSession } from '../types/chat';
-
-const API_URL = 'http://localhost:8080/api/chat';
+import { CHAT_API_URL } from '../config/api';
 
 const chatApi = axios.create({
-  baseURL: API_URL,
+  baseURL: CHAT_API_URL,
 });
 
 chatApi.interceptors.request.use((config) => {
@@ -30,8 +29,6 @@ export const getMessages = async (
   totalPages: number;
   totalElements: number;
 }> => {
-  const response = await chatApi.get(
-    `/sessions/${sessionId}/messages?page=${page}&size=${size}`
-  );
+  const response = await chatApi.get(`/sessions/${sessionId}/messages?page=${page}&size=${size}`);
   return response.data;
 }; 

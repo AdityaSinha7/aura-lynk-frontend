@@ -11,7 +11,7 @@ export class WebSocketService {
   private connectionHandlers: Set<ConnectionHandler> = new Set();
   private subscription: StompSubscription | null = null;
 
-  constructor(private baseUrl: string = 'http://localhost:8080/ws/chat') {}
+  constructor(private baseUrl: string = `http://${window.location.hostname}:8080/ws/chat`) {}
 
   connect(sessionId: number, token: string) {
     console.log('Attempting to connect WebSocket...', { sessionId, baseUrl: this.baseUrl });

@@ -13,7 +13,9 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button
+  Button,
+  SxProps,
+  Theme
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -25,6 +27,7 @@ interface SessionListProps {
   onSessionSelect: (session: ChatSession) => void;
   onSessionDelete: (sessionId: number) => void;
   onSessionRename: (sessionId: number) => void;
+  sx?: SxProps<Theme>;
 }
 
 export const SessionList: React.FC<SessionListProps> = ({
@@ -33,6 +36,7 @@ export const SessionList: React.FC<SessionListProps> = ({
   onSessionSelect,
   onSessionDelete,
   onSessionRename,
+  sx
 }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
   const [sessionToDelete, setSessionToDelete] = React.useState<number | null>(null);
@@ -52,33 +56,20 @@ export const SessionList: React.FC<SessionListProps> = ({
 
   return (
     <>
-      <Paper sx={{ width: 240, height: '100%', overflow: 'auto' }}>
+      <Paper sx={{ width: 240, height: '100%', overflow: 'auto', ...sx }}>
         <List>
           {sessions.map((session) => (
             <ListItem 
               key={session.id} 
               disablePadding
               secondaryAction={
-                <Box>
-                  <IconButton
-                    edge="end"
-                    aria-label="rename"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onSessionRename(session.id);
-                    }}
-                    sx={{ mr: 1 }}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton 
-                    edge="end" 
-                    aria-label="delete"
-                    onClick={(e) => handleDeleteClick(session.id, e)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Box>
+                <IconButton 
+                  edge="end" 
+                  aria-label="delete"
+                  onClick={(e) => handleDeleteClick(session.id, e)}
+                >
+                  <DeleteIcon />
+                </IconButton>
               }
             >
               <ListItemButton 

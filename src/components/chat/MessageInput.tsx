@@ -28,22 +28,37 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   };
 
   return (
-    <Box sx={{ display: 'flex', gap: 1, p: 2, backgroundColor: 'background.paper' }}>
+    <Box sx={{ 
+      p: 2, 
+      display: 'flex', 
+      gap: 1,
+      position: 'relative',
+      backgroundColor: 'background.paper'
+    }}>
       <TextField
         fullWidth
         multiline
-        maxRows={4}
+        maxRows={3}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         onKeyPress={handleKeyPress}
         placeholder="Type a message..."
         disabled={disabled}
-        sx={{ backgroundColor: 'white' }}
+        sx={{ 
+          backgroundColor: 'white',
+          '& .MuiInputBase-root': {
+            fontSize: { xs: '0.9rem', sm: '1rem' }
+          }
+        }}
       />
       <IconButton 
         color="primary" 
         onClick={handleSend} 
         disabled={disabled || !message.trim()}
+        sx={{ 
+          alignSelf: 'flex-end',
+          padding: { xs: 1, sm: 2 }
+        }}
       >
         <SendIcon />
       </IconButton>

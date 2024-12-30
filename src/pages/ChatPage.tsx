@@ -50,6 +50,13 @@ export const ChatPage: React.FC = () => {
   useEffect(() => {
     const initializeChat = async () => {
       try {
+        // Check if user is authenticated
+        const userStr = localStorage.getItem('user');
+        if (!userStr) {
+          navigate('/login');
+          return;
+        }
+
         setIsLoading(true);
         const sessionsResponse = await chatApi.getSessions();
         setSessions(sessionsResponse.content);
@@ -266,44 +273,71 @@ export const ChatPage: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ height: '100vh', py: 2 }}>
+    <Container 
+      maxWidth="lg" 
+      sx={{ 
+        height: '100vh', 
+        py: { xs: 1, sm: 2 }, 
+        px: { xs: 1, sm: 2 } 
+      }}
+    >
       <AppBar position="static" sx={{ mb: 2, borderRadius: 1 }}>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography 
+            variant="h6" 
+            component="div" 
+            sx={{ 
+              flexGrow: 1,
+              fontSize: { xs: '1rem', sm: '1.25rem' }
+            }}
+          >
             AuraLynk Chat
           </Typography>
           <Button 
             color="inherit" 
             onClick={handleNewChat}
             startIcon={<AddIcon />}
-            sx={{ mr: 2 }}
+            sx={{ 
+              mr: { xs: 1, sm: 2 },
+              fontSize: { xs: '0.8rem', sm: '1rem' }
+            }}
           >
-            New Chat
+            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>New Chat</Box>
           </Button>
           <Button 
             color="inherit" 
             onClick={handleLogout}
             startIcon={<LogoutIcon />}
+            sx={{ fontSize: { xs: '0.8rem', sm: '1rem' } }}
           >
-            Logout
+            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>Logout</Box>
           </Button>
         </Toolbar>
       </AppBar>
-      <Box sx={{ display: 'flex', gap: 2, height: 'calc(100% - 80px)' }}>
+      <Box sx={{ 
+        display: 'flex', 
+        flexDirection: { xs: 'column', sm: 'row' },
+        gap: 2, 
+        height: { xs: 'calc(100% - 64px)', sm: 'calc(100% - 80px)' }
+      }}>
         <SessionList
           sessions={sessions}
           currentSessionId={session?.id || 0}
           onSessionSelect={handleSessionSelect}
           onSessionDelete={handleSessionDelete}
-          onSessionRename={handleRenameSession}
+          sx={{ 
+            width: { xs: '100%', sm: 240 },
+            height: { xs: '30%', sm: '100%' }
+          }}
         />
         <Paper 
           elevation={3} 
           sx={{ 
             flexGrow: 1,
-            height: '100%', 
+            height: { xs: '70%', sm: '100%' }, 
             display: 'flex', 
-            flexDirection: 'column' 
+            flexDirection: 'column',
+            overflow: 'hidden'
           }}
         >
           {error && (

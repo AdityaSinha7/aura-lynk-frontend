@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { ChatMessage, ChatSession } from '../types/chat';
+import { CHAT_API_URL } from '../config/api';
 
-const API_URL = 'http://localhost:8080/api/chat';
+const API_URL = CHAT_API_URL;
 
 // Configure axios with auth token
 const chatApi = axios.create({
@@ -9,6 +10,13 @@ const chatApi = axios.create({
 });
 
 chatApi.interceptors.request.use((config) => {
+  console.log('API Request:', {
+    url: config.url,
+    method: config.method,
+    headers: config.headers,
+    data: config.data,
+    baseURL: config.baseURL
+  });
   const userStr = localStorage.getItem('user');
   if (!userStr) {
     throw new Error('No authentication token found');
@@ -16,14 +24,33 @@ chatApi.interceptors.request.use((config) => {
   
   const user = JSON.parse(userStr);
   if (user?.token) {
+    console.log('Using token:', user.token);
     config.headers.Authorization = `Bearer ${user.token}`;
   }
   return config;
 });
 
 chatApi.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log('API Response:', {
+      status: response.status,
+      data: response.data,
+      headers: response.headers
+    });
+    return response;
+  },
   (error) => {
+    console.error('API Error:', {
+      status: error.response?.status,
+      message: error.message,
+      data: error.response?.data,
+      config: {
+        url: error.config?.url,
+        method: error.config?.method,
+        headers: error.config?.headers,
+        data: error.config?.data
+      }
+    });
     if (error.response?.status === 403) {
       localStorage.removeItem('user');
     }
